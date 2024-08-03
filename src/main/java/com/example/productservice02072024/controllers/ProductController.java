@@ -19,7 +19,11 @@ public class ProductController {
 
 
     }
-    @PostMapping("products")
+    @GetMapping("/products")
+    public ProductResponseDto[] getAllProductsDetails(){
+        return productService.getAllProducts();
+    }
+    @PostMapping("/products")
     public ProductResponseDto createNewProduct(@RequestBody ProductRequestDto productRequestDto){
         return productService.addProduct(
                 productRequestDto.getTitle(),
@@ -29,5 +33,18 @@ public class ProductController {
                 productRequestDto.getPrice()
         );
 
+    }
+    @DeleteMapping("/products/{id}")
+    public ProductResponseDto deleteProduct(@PathVariable("id") int productId){
+        return productService.deleteAProduct(productId);
+    }
+
+    @PutMapping("/products/{id}")
+    public ProductResponseDto putProduct(@PathVariable("id") int productId,@RequestBody ProductRequestDto productRequestDto){
+        return productService.putProduct(productId,productRequestDto);
+    }
+    @PatchMapping("/products/{id}")
+    public ProductResponseDto patchProduct(@PathVariable("id") int productId,@RequestBody ProductRequestDto productRequestDto){
+        return productService.patchProduct(productId,productRequestDto);
     }
 }
