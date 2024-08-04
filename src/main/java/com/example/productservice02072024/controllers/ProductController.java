@@ -7,6 +7,8 @@ import com.example.productservice02072024.models.Product;
 import com.example.productservice02072024.services.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,13 +20,14 @@ public class ProductController {
         this.productService=productService;
     }
     @GetMapping("/products/{id}")
-    public ProductResponseDto getProductDetails(@PathVariable("id") int productId){
+    public ResponseEntity<ProductResponseDto> getProductDetails(@PathVariable("id") int productId){
         Product product= productService.getSingleProduct(productId);
-        return convertProductToProductResponseDto(product);
+        ProductResponseDto productResponseDto=convertProductToProductResponseDto(product);
+        return new ResponseEntity<>(productResponseDto, HttpStatus.OK);
 
     }
     @GetMapping("/products")
-    public ProductResponseDto[] getAllProductsDetails(){
+    public ResponseEntity<ProductResponseDto[]> getAllProductsDetails(){
         Product[] products= productService.getAllProducts();
         ProductResponseDto[] productResponseDtos=new ProductResponseDto[products.length];
         int index=0;
@@ -32,10 +35,10 @@ public class ProductController {
             productResponseDtos[index]=convertProductToProductResponseDto(product);
             index+=1;
         }
-        return productResponseDtos;
+        return new ResponseEntity<>(productResponseDtos,HttpStatus.OK);
     }
     @PostMapping("/products")
-    public ProductResponseDto createNewProduct(@RequestBody ProductRequestDto productRequestDto){
+    public ResponseEntity<ProductResponseDto> createNewProduct(@RequestBody ProductRequestDto productRequestDto){
         Product product= productService.addProduct(
                 productRequestDto.getTitle(),
                 productRequestDto.getDescription(),
@@ -43,23 +46,27 @@ public class ProductController {
                 productRequestDto.getCategory(),
                 productRequestDto.getPrice()
         );
-        return convertProductToProductResponseDto(product);
+       ProductResponseDto productResponseDto= convertProductToProductResponseDto(product);
+        return new ResponseEntity<>(productResponseDto, HttpStatus.OK);
     }
     @DeleteMapping("/products/{id}")
-    public ProductResponseDto deleteProduct(@PathVariable("id") int productId){
+    public ResponseEntity<ProductResponseDto> deleteProduct(@PathVariable("id") int productId){
         Product product= productService.deleteAProduct(productId);
-        return convertProductToProductResponseDto(product);
+        ProductResponseDto productResponseDto= convertProductToProductResponseDto(product);
+        return new ResponseEntity<>(productResponseDto, HttpStatus.OK);
     }
 
     @PutMapping("/products/{id}")
-    public ProductResponseDto putProduct(@PathVariable("id") int productId,@RequestBody ProductRequestDto productRequestDto){
+    public ResponseEntity<ProductResponseDto> putProduct(@PathVariable("id") int productId,@RequestBody ProductRequestDto productRequestDto){
         Product product= productService.putProduct(productId,productRequestDto);
-        return convertProductToProductResponseDto(product);
+        ProductResponseDto productResponseDto= convertProductToProductResponseDto(product);
+        return new ResponseEntity<>(productResponseDto, HttpStatus.OK);
     }
     @PatchMapping("/products/{id}")
-    public ProductResponseDto patchProduct(@PathVariable("id") int productId,@RequestBody ProductRequestDto productRequestDto){
+    public ResponseEntity<ProductResponseDto> patchProduct(@PathVariable("id") int productId,@RequestBody ProductRequestDto productRequestDto){
         Product product=productService.patchProduct(productId,productRequestDto);
-        return convertProductToProductResponseDto(product);
+        ProductResponseDto productResponseDto= convertProductToProductResponseDto(product);
+        return new ResponseEntity<>(productResponseDto, HttpStatus.OK);
     }
     private ProductResponseDto convertProductToProductResponseDto(Product product){
         String categoryTitle=product.getCategory().getTitle();
