@@ -5,46 +5,67 @@ import com.example.productservice02072024.dtos.ProductRequestDto;
 import com.example.productservice02072024.dtos.ProductResponseDto;
 import com.example.productservice02072024.models.Product;
 import com.example.productservice02072024.services.ProductService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ProductController {
     private ProductService productService;
+    @Autowired
+    private ModelMapper modelMapper;
     public ProductController(ProductService productService){
         this.productService=productService;
     }
     @GetMapping("/products/{id}")
     public ProductResponseDto getProductDetails(@PathVariable("id") int productId){
-        return productService.getSingleProduct(productId);
-
+        Product product= productService.getSingleProduct(productId);
+        return convertProductToProductResponseDto(product);
 
     }
     @GetMapping("/products")
     public ProductResponseDto[] getAllProductsDetails(){
-        return productService.getAllProducts();
+        Product[] products= productService.getAllProducts();
+        ProductResponseDto[] productResponseDtos=new ProductResponseDto[products.length];
+        int index=0;
+        for(Product product:products){
+            productResponseDtos[index]=convertProductToProductResponseDto(product);
+            index+=1;
+        }
+        return productResponseDtos;
     }
     @PostMapping("/products")
     public ProductResponseDto createNewProduct(@RequestBody ProductRequestDto productRequestDto){
-        return productService.addProduct(
+        Product product= productService.addProduct(
                 productRequestDto.getTitle(),
                 productRequestDto.getDescription(),
                 productRequestDto.getImage(),
                 productRequestDto.getCategory(),
                 productRequestDto.getPrice()
         );
-
+        return convertProductToProductResponseDto(product);
     }
     @DeleteMapping("/products/{id}")
     public ProductResponseDto deleteProduct(@PathVariable("id") int productId){
-        return productService.deleteAProduct(productId);
+        Product product= productService.deleteAProduct(productId);
+        return convertProductToProductResponseDto(product);
     }
 
     @PutMapping("/products/{id}")
     public ProductResponseDto putProduct(@PathVariable("id") int productId,@RequestBody ProductRequestDto productRequestDto){
-        return productService.putProduct(productId,productRequestDto);
+        Product product= productService.putProduct(productId,productRequestDto);
+        return convertProductToProductResponseDto(product);
     }
     @PatchMapping("/products/{id}")
     public ProductResponseDto patchProduct(@PathVariable("id") int productId,@RequestBody ProductRequestDto productRequestDto){
-        return productService.patchProduct(productId,productRequestDto);
+        Product product=productService.patchProduct(productId,productRequestDto);
+        return convertProductToProductResponseDto(product);
+    }
+    private ProductResponseDto convertProductToProductResponseDto(Product product){
+        String categoryTitle=product.getCategory().getTitle();
+        ProductResponseDto productResponseDto=modelMapper.map(product,ProductResponseDto.class);
+        productResponseDto.setCategory(categoryTitle);
+        return productResponseDto;
+
     }
 }

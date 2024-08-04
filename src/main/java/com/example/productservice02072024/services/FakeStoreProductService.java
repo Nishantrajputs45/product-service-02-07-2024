@@ -19,28 +19,28 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public ProductResponseDto getSingleProduct(int productId) {
+    public Product getSingleProduct(int productId) {
         FakeStoreDto fakeStoreDto=restTemplate.getForObject("https://fakestoreapi.com/products/"+productId,
                 FakeStoreDto.class);
 
-        return fakeStoreDto.toProductResponseDto();
+        return fakeStoreDto.toProduct();
     }
 
     @Override
-    public ProductResponseDto[] getAllProducts() {
+    public Product[] getAllProducts() {
         FakeStoreDto[] fakeStoreDtos=restTemplate.getForObject("https://fakestoreapi.com/products/", FakeStoreDto[].class);
         int fakeStoreSize=fakeStoreDtos.length;
-        ProductResponseDto[] productResponseDtos=new ProductResponseDto[fakeStoreSize];
+        Product[] products=new Product[fakeStoreSize];
         int index=0;
         for(FakeStoreDto fakeStoreDto:fakeStoreDtos){
-            productResponseDtos[index]=fakeStoreDto.toProductResponseDto();
+            products[index]=fakeStoreDto.toProduct();
             index+=1;
         }
-       return productResponseDtos;
+       return products;
     }
 
     @Override
-    public ProductResponseDto addProduct(String title, String description, String imageURL, String category, double price) {
+    public Product addProduct(String title, String description, String imageURL, String category, double price) {
         FakeStoreDto fakeStoreDto=new FakeStoreDto();
         fakeStoreDto.setTitle(title);
         fakeStoreDto.setDescription(description);
@@ -49,19 +49,19 @@ public class FakeStoreProductService implements ProductService{
         fakeStoreDto.setPrice(price);
 
         FakeStoreDto response=restTemplate.postForObject("https://fakestoreapi.com/products/",fakeStoreDto,FakeStoreDto.class);
-        return response.toProductResponseDto();
+        return response.toProduct();
 
 
     }
 
     @Override
-    public ProductResponseDto deleteAProduct(int productId) {
+    public Product deleteAProduct(int productId) {
         ResponseEntity<FakeStoreDto> fakeStoreDto=restTemplate.exchange("https://fakestoreapi.com/products/"+productId, HttpMethod.DELETE,null,FakeStoreDto.class);
-        return fakeStoreDto.getBody().toProductResponseDto();
+        return fakeStoreDto.getBody().toProduct();
     }
 
     @Override
-    public ProductResponseDto putProduct(int productId, ProductRequestDto productRequestDto) {
+    public Product putProduct(int productId, ProductRequestDto productRequestDto) {
         FakeStoreDto fakeStoreDto=new FakeStoreDto();
         fakeStoreDto.setTitle(productRequestDto.getTitle());
         fakeStoreDto.setDescription(productRequestDto.getDescription());
@@ -72,12 +72,12 @@ public class FakeStoreProductService implements ProductService{
         HttpEntity<FakeStoreDto> requestUpdate = new HttpEntity<>(fakeStoreDto);
         ResponseEntity<FakeStoreDto> response=restTemplate.exchange("https://fakestoreapi.com/products/"+productId,HttpMethod.PUT,requestUpdate,FakeStoreDto.class);
 
-        return response.getBody().toProductResponseDto();
+        return response.getBody().toProduct();
 
     }
 
     @Override
-    public ProductResponseDto patchProduct(int productId, ProductRequestDto productRequestDto) {
+    public Product patchProduct(int productId, ProductRequestDto productRequestDto) {
         FakeStoreDto fakeStoreDto=new FakeStoreDto();
         fakeStoreDto.setTitle(productRequestDto.getTitle());
         fakeStoreDto.setDescription(productRequestDto.getDescription());
@@ -86,6 +86,6 @@ public class FakeStoreProductService implements ProductService{
         fakeStoreDto.setPrice(productRequestDto.getPrice());
 
         fakeStoreDto.setId(productId);
-        return fakeStoreDto.toProductResponseDto();
+        return fakeStoreDto.toProduct();
     }
 }
