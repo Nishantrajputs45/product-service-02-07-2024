@@ -1,5 +1,6 @@
 package com.example.productservice02072024.services;
 
+import com.example.productservice02072024.advice.ProductNotFound;
 import com.example.productservice02072024.dtos.FakeStoreDto;
 import com.example.productservice02072024.dtos.ProductRequestDto;
 import com.example.productservice02072024.dtos.ProductResponseDto;
@@ -22,6 +23,9 @@ public class FakeStoreProductService implements ProductService{
     public Product getSingleProduct(int productId) {
         FakeStoreDto fakeStoreDto=restTemplate.getForObject("https://fakestoreapi.com/products/"+productId,
                 FakeStoreDto.class);
+        if(fakeStoreDto==null){
+            throw new ProductNotFound("your id is not matching with database id");
+        }
 
         return fakeStoreDto.toProduct();
     }
