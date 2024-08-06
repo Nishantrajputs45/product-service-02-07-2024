@@ -7,16 +7,17 @@ import com.example.productservice02072024.models.Product;
 import com.example.productservice02072024.services.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ProductController {
-    private ProductService productService;
+    private final ProductService productService;
     @Autowired
     private ModelMapper modelMapper;
-    public ProductController(ProductService productService){
+    public ProductController(@Qualifier("selfProductService") ProductService productService){
         this.productService=productService;
     }
     @GetMapping("/products/{id}")
@@ -42,7 +43,7 @@ public class ProductController {
         Product product= productService.addProduct(
                 productRequestDto.getTitle(),
                 productRequestDto.getDescription(),
-                productRequestDto.getImage(),
+                productRequestDto.getImageUrl(),
                 productRequestDto.getCategory(),
                 productRequestDto.getPrice()
         );
@@ -58,13 +59,21 @@ public class ProductController {
 
     @PutMapping("/products/{id}")
     public ResponseEntity<ProductResponseDto> putProduct(@PathVariable("id") int productId,@RequestBody ProductRequestDto productRequestDto){
-        Product product= productService.putProduct(productId,productRequestDto);
+        Product product= productService.putProduct(productId,productRequestDto.getTitle(),
+                productRequestDto.getDescription(),
+                productRequestDto.getImageUrl(),
+                productRequestDto.getCategory(),
+                productRequestDto.getPrice());
         ProductResponseDto productResponseDto= convertProductToProductResponseDto(product);
         return new ResponseEntity<>(productResponseDto, HttpStatus.OK);
     }
     @PatchMapping("/products/{id}")
     public ResponseEntity<ProductResponseDto> patchProduct(@PathVariable("id") int productId,@RequestBody ProductRequestDto productRequestDto){
-        Product product=productService.patchProduct(productId,productRequestDto);
+        Product product=productService.patchProduct(productId,productRequestDto.getTitle(),
+                productRequestDto.getDescription(),
+                productRequestDto.getImageUrl(),
+                productRequestDto.getCategory(),
+                productRequestDto.getPrice());
         ProductResponseDto productResponseDto= convertProductToProductResponseDto(product);
         return new ResponseEntity<>(productResponseDto, HttpStatus.OK);
     }

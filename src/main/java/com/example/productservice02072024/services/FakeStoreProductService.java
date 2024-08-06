@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-@Service
+@Service("fakeStoreProductService")
 public class FakeStoreProductService implements ProductService{
     private RestTemplate restTemplate;
 
@@ -65,13 +65,13 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public Product putProduct(int productId, ProductRequestDto productRequestDto) {
+    public Product putProduct(int productId, String title,String description,String imageUrl,String category, double price) {
         FakeStoreDto fakeStoreDto=new FakeStoreDto();
-        fakeStoreDto.setTitle(productRequestDto.getTitle());
-        fakeStoreDto.setDescription(productRequestDto.getDescription());
-        fakeStoreDto.setImage(productRequestDto.getImage());
-        fakeStoreDto.setCategory(productRequestDto.getCategory());
-        fakeStoreDto.setPrice(productRequestDto.getPrice());
+        fakeStoreDto.setTitle(title);
+        fakeStoreDto.setDescription(description);
+        fakeStoreDto.setImage(imageUrl);
+        fakeStoreDto.setCategory(category);
+        fakeStoreDto.setPrice(price);
 
         HttpEntity<FakeStoreDto> requestUpdate = new HttpEntity<>(fakeStoreDto);
         ResponseEntity<FakeStoreDto> response=restTemplate.exchange("https://fakestoreapi.com/products/"+productId,HttpMethod.PUT,requestUpdate,FakeStoreDto.class);
@@ -81,14 +81,23 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public Product patchProduct(int productId, ProductRequestDto productRequestDto) {
+    public Product patchProduct(int productId, String title,String description,String imageUrl,String category, double price) {
         FakeStoreDto fakeStoreDto=new FakeStoreDto();
-        fakeStoreDto.setTitle(productRequestDto.getTitle());
-        fakeStoreDto.setDescription(productRequestDto.getDescription());
-        fakeStoreDto.setImage(productRequestDto.getImage());
-        fakeStoreDto.setCategory(productRequestDto.getCategory());
-        fakeStoreDto.setPrice(productRequestDto.getPrice());
-
+        if(title!=null){
+            fakeStoreDto.setTitle(title);
+        }
+        if(description!=null){
+            fakeStoreDto.setDescription(description);
+        }
+        if(imageUrl!=null){
+            fakeStoreDto.setImage(imageUrl);
+        }
+        if(category!=null){
+            fakeStoreDto.setCategory(category);
+        }
+        if(price!=0) {
+            fakeStoreDto.setPrice(price);
+        }
         fakeStoreDto.setId(productId);
         return fakeStoreDto.toProduct();
     }

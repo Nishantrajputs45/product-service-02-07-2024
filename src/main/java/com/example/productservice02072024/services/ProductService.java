@@ -19,7 +19,7 @@ public interface ProductService {
 
     Product deleteAProduct(int productId);
 
-    Product putProduct(int productId, ProductRequestDto productRequestDto);
+    Product putProduct(int productId,String title,String description,String imageUrl,String category, double price);
 
-    Product patchProduct(int productId, ProductRequestDto productRequestDto);
+    Product patchProduct(int productId, String title,String description,String imageUrl,String category, double price);
 }
