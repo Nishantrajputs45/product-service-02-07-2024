@@ -67,7 +67,7 @@ class ProductService02072024ApplicationTests {
   @Test
     void testNativeQuery(){
         Product product=productRepository.someNativeSqlQuery(1);
-      System.out.println(product.getTitle());
+        System.out.println(product.getTitle());
   }
 
   @Test

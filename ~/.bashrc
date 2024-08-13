@@ -1,0 +1,3 @@
+set PROD_SERV_DB_URL=prod-serv-rds-02072024.cr2y0cg8w9yk.ap-south-1.rds.amazonaws.com
+set PROD_SERV_DB_NAME=product_service_02_07_2024
+set PROD_SERV_DB_USER_NAME=product_service_02_07_2024

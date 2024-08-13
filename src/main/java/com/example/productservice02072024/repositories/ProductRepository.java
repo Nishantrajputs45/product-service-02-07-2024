@@ -29,7 +29,7 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
 
     //Native SQL Query
 
-    @Query(value= "select * from Product p where p.id= :id",nativeQuery = true)
+    @Query(value= "select * from product p where p.id= :id",nativeQuery = true)
     Product someNativeSqlQuery(Integer id);
 
 }
