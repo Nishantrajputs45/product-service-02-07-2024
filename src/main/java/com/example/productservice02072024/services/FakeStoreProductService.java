@@ -5,6 +5,7 @@ import com.example.productservice02072024.dtos.FakeStoreDto;
 import com.example.productservice02072024.dtos.ProductRequestDto;
 import com.example.productservice02072024.dtos.ProductResponseDto;
 import com.example.productservice02072024.models.Product;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -31,16 +32,17 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public Product[] getAllProducts() {
-        FakeStoreDto[] fakeStoreDtos=restTemplate.getForObject("https://fakestoreapi.com/products/", FakeStoreDto[].class);
-        int fakeStoreSize=fakeStoreDtos.length;
-        Product[] products=new Product[fakeStoreSize];
-        int index=0;
-        for(FakeStoreDto fakeStoreDto:fakeStoreDtos){
-            products[index]=fakeStoreDto.toProduct();
-            index+=1;
-        }
-       return products;
+    public Page<Product> getAllProducts(int pageSize,int pageNumber,String fieldName) {
+//        FakeStoreDto[] fakeStoreDtos=restTemplate.getForObject("https://fakestoreapi.com/products/", FakeStoreDto[].class);
+//        int fakeStoreSize=fakeStoreDtos.length;
+//        Product[] products=new Product[fakeStoreSize];
+//        int index=0;
+//        for(FakeStoreDto fakeStoreDto:fakeStoreDtos){
+//            products[index]=fakeStoreDto.toProduct();
+//            index+=1;
+//        }
+//       return products;
+        return null;
     }
 
     @Override

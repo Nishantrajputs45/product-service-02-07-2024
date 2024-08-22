@@ -8,6 +8,7 @@ import com.example.productservice02072024.services.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,15 +29,16 @@ public class ProductController {
 
     }
     @GetMapping("/products")
-    public ResponseEntity<ProductResponseDto[]> getAllProductsDetails(){
-        Product[] products= productService.getAllProducts();
-        ProductResponseDto[] productResponseDtos=new ProductResponseDto[products.length];
-        int index=0;
-        for(Product product:products){
-            productResponseDtos[index]=convertProductToProductResponseDto(product);
-            index+=1;
-        }
-        return new ResponseEntity<>(productResponseDtos,HttpStatus.OK);
+    public Page<Product> getAllProductsDetails(@RequestParam("pageSize") int pageSize,@RequestParam("pageNumber") int pageNumber,@RequestParam("sortBy") String fieldName){
+//        Product[] products= productService.getAllProducts();
+//        ProductResponseDto[] productResponseDtos=new ProductResponseDto[products.length];
+//        int index=0;
+//        for(Product product:products){
+//            productResponseDtos[index]=convertProductToProductResponseDto(product);
+//            index+=1;
+//        }
+//        return new ResponseEntity<>(productResponseDtos,HttpStatus.OK);
+        return productService.getAllProducts(pageSize,pageNumber,fieldName);
     }
     @PostMapping("/products")
     public ResponseEntity<ProductResponseDto> createNewProduct(@RequestBody ProductRequestDto productRequestDto){
