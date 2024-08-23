@@ -10,15 +10,16 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
-@Table(name = "product")
-public class Product extends BaseModel{
+
+public class Product  {
+    int id;
     private String title;
     private String description;
     private double price;
     private String imageUrl;
-    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @ManyToOne
     private Category category;
+
 
 
 }

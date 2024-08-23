@@ -12,11 +12,6 @@ import java.util.List;
 
 @Setter
 @Getter
-@Entity
-public class Category extends BaseModel {
-    private String title;
-    private String description;
-    @OneToMany(mappedBy = "category",fetch = FetchType.LAZY)
-    @Fetch(FetchMode.SUBSELECT)
-    List<Product> products;
+public class Category  {
+    String title;
 }

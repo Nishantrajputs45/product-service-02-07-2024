@@ -6,6 +6,7 @@ import com.example.productservice02072024.dtos.ProductRequestDto;
 import com.example.productservice02072024.dtos.ProductResponseDto;
 import com.example.productservice02072024.models.Product;
 import org.springframework.data.domain.Page;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -15,18 +16,22 @@ import org.springframework.web.client.RestTemplate;
 @Service("fakeStoreProductService")
 public class FakeStoreProductService implements ProductService{
     private RestTemplate restTemplate;
+    private RedisTemplate redisTemplate;
 
-    public FakeStoreProductService(RestTemplate restTemplate) {
+    public FakeStoreProductService(RestTemplate restTemplate, RedisTemplate redisTemplate) {
         this.restTemplate = restTemplate;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
     public Product getSingleProduct(int productId) {
+
         FakeStoreDto fakeStoreDto=restTemplate.getForObject("https://fakestoreapi.com/products/"+productId,
                 FakeStoreDto.class);
         if(fakeStoreDto==null){
             throw new ProductNotFound("your id is not matching with database id");
         }
+
 
         return fakeStoreDto.toProduct();
     }

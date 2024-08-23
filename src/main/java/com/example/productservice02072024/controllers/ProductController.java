@@ -18,7 +18,7 @@ public class ProductController {
     private final ProductService productService;
     @Autowired
     private ModelMapper modelMapper;
-    public ProductController(@Qualifier("selfProductService") ProductService productService){
+    public ProductController(@Qualifier("fakeStoreProductService") ProductService productService){
         this.productService=productService;
     }
     @GetMapping("/products/{id}")
