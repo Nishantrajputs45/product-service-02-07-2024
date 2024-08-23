@@ -25,14 +25,17 @@ public class FakeStoreProductService implements ProductService{
 
     @Override
     public Product getSingleProduct(int productId) {
-
+        Product productFromRedis= (Product) redisTemplate.opsForHash().get("PRODUCTS","PRODUCT_"+productId);
+        if(productFromRedis!=null){
+            return productFromRedis;
+        }
         FakeStoreDto fakeStoreDto=restTemplate.getForObject("https://fakestoreapi.com/products/"+productId,
                 FakeStoreDto.class);
         if(fakeStoreDto==null){
             throw new ProductNotFound("your id is not matching with database id");
         }
 
-
+        redisTemplate.opsForHash().put("PRODUCTS","PRODUCT_"+productId,fakeStoreDto.toProduct());
         return fakeStoreDto.toProduct();
     }
 
